@@ -27,7 +27,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 	"github.com/hashicorp/terraform-provider-aws/internal/conns"
 	"github.com/hashicorp/terraform-provider-aws/internal/flex"
-	"github.com/hashicorp/terraform-provider-aws/internal/service/kms"
 	tftags "github.com/hashicorp/terraform-provider-aws/internal/tags"
 	"github.com/hashicorp/terraform-provider-aws/internal/tfresource"
 	"github.com/hashicorp/terraform-provider-aws/internal/verify"
@@ -546,21 +545,6 @@ func resourceBucketObjectUpload(d *schema.ResourceData, meta interface{}) error 
 }
 
 func resourceBucketObjectSetKMS(d *schema.ResourceData, meta interface{}, sseKMSKeyId *string) error {
-	// Only set non-default KMS key ID (one that doesn't match default)
-	if sseKMSKeyId != nil {
-		// retrieve S3 KMS Default Master Key
-		conn := meta.(*conns.AWSClient).KMSConn
-		keyMetadata, err := kms.FindKeyByID(conn, DefaultKMSKeyAlias)
-		if err != nil {
-			return fmt.Errorf("Failed to describe default S3 KMS key (%s): %s", DefaultKMSKeyAlias, err)
-		}
-
-		if aws.StringValue(sseKMSKeyId) != aws.StringValue(keyMetadata.Arn) {
-			log.Printf("[DEBUG] S3 object is encrypted using a non-default KMS Key ID: %s", aws.StringValue(sseKMSKeyId))
-			d.Set("kms_key_id", sseKMSKeyId)
-		}
-	}
-
 	return nil
 }
 

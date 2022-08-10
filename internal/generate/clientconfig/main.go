@@ -122,12 +122,10 @@ var tmpl = `
 package conns
 
 import (
-	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 {{- range .Services }}
 	"github.com/aws/aws-sdk-go{{ if eq .SDKVersion "2" }}-v2{{ end }}/service/{{ .GoPackage }}"
 {{- end }}
-	"github.com/hashicorp/terraform-provider-aws/names"
 )
 
 func (c *Config) clientConns(sess *session.Session) *AWSClient {

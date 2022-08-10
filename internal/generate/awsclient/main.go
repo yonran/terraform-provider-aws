@@ -140,7 +140,6 @@ type AWSClient struct {
 	DefaultTagsConfig         *tftags.DefaultConfig
 	DNSSuffix                 string
 	IgnoreTagsConfig          *tftags.IgnoreConfig
-	MediaConvertAccountConn   *mediaconvert.MediaConvert
 	Partition                 string
 	Region                    string
 	ReverseDNSPrefix          string
